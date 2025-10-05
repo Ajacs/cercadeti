@@ -19,10 +19,11 @@
     "populate-admin": "node scripts/populate-with-admin.js",
     "populate-businesses": "node scripts/populate-businesses.js",
     "setup": "node scripts/setup-strapi.js",
-      "configure-permissions": "node scripts/configure-public-permissions.js",
-      "configure-new-permissions": "node scripts/configure-new-permissions.js"
+    "configure-permissions": "node scripts/configure-public-permissions.js",
+    "configure-new-permissions": "node scripts/configure-new-permissions.js"
   },
   "dependencies": {
+    "@sentry/node": "^10.17.0",
     "@strapi/plugin-cloud": "5.25.0",
     "@strapi/plugin-users-permissions": "5.25.0",
     "@strapi/strapi": "5.25.0",

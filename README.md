@@ -45,7 +45,22 @@ npm run develop
 ### Frontend (.env.local)
 ```
 NEXT_PUBLIC_STRAPI_URL=http://localhost:1337
+NEXT_PUBLIC_SENTRY_DSN=https://your-dsn@sentry.io/project-id  # Opcional
 ```
 
 ### Backend (.env)
+```
+SENTRY_DSN=https://your-dsn@sentry.io/project-id  # Opcional
+```
+
 Ver `backend/.env.example` para la configuración completa.
+
+## Monitoreo y APM
+
+El proyecto incluye configuración de Sentry para monitoreo de errores y performance.
+
+Ver [MONITORING_SETUP.md](./MONITORING_SETUP.md) para instrucciones detalladas de configuración.
+
+**Herramientas gratuitas configuradas:**
+- 🔍 **Sentry**: Error tracking y performance monitoring
+- ⚡ **Vercel Speed Insights**: Métricas de rendimiento del frontend

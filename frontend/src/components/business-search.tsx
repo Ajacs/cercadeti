@@ -3,7 +3,7 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Loader2 } from "lucide-react";
-import { useBusinessSearch } from "@/hooks/use-business-search";
+import { useSimpleSearch } from "@/hooks/use-simple-search";
 
 interface BusinessSearchProps {
   searchTerm: string;
@@ -13,7 +13,7 @@ interface BusinessSearchProps {
 }
 
 export function BusinessSearch({ searchTerm, setSearchTerm, selectedCategory, onSearchResults }: BusinessSearchProps) {
-  const { businesses, loading, error } = useBusinessSearch(searchTerm, selectedCategory);
+  const { businesses, loading, error } = useSimpleSearch(searchTerm, selectedCategory);
 
   // Notificar resultados de búsqueda al componente padre
   React.useEffect(() => {
