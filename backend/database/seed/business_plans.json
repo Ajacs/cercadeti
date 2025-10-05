@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Plan Básico",
+    "description": "Plan perfecto para pequeños negocios que quieren comenzar",
+    "price": 99,
+    "currency": "MXN",
+    "features": [
+      "1 anuncio destacado",
+      "1 oferta especial",
+      "Perfil básico del negocio",
+      "Soporte por email",
+      "Estadísticas básicas"
+    ],
+    "duration_days": 30,
+    "max_ads": 1,
+    "max_offers": 1,
+    "active": true,
+    "sort_order": 1
+  },
+  {
+    "name": "Plan Premium",
+    "description": "Ideal para negocios en crecimiento que buscan más visibilidad",
+    "price": 299,
+    "currency": "MXN",
+    "features": [
+      "5 anuncios destacados",
+      "3 ofertas especiales",
+      "Perfil completo del negocio",
+      "Soporte prioritario",
+      "Estadísticas avanzadas",
+      "Badge \"Verificado\"",
+      "Prioridad en búsquedas"
+    ],
+    "duration_days": 30,
+    "max_ads": 5,
+    "max_offers": 3,
+    "active": true,
+    "sort_order": 2
+  },
+  {
+    "name": "Plan Empresarial",
+    "description": "Para grandes empresas que necesitan máxima exposición",
+    "price": 599,
+    "currency": "MXN",
+    "features": [
+      "Anuncios ilimitados",
+      "Ofertas ilimitadas",
+      "Perfil premium con galería",
+      "Soporte 24/7",
+      "Analytics completos",
+      "Badge \"Premium\"",
+      "Posición destacada garantizada",
+      "Integración con redes sociales",
+      "Reportes personalizados"
+    ],
+    "duration_days": 30,
+    "max_ads": -1,
+    "max_offers": -1,
+    "active": true,
+    "sort_order": 3
+  }
+]

@@ -1,0 +1,120 @@
+{
+  "kind": "collectionType",
+  "collectionName": "businesses",
+  "info": {
+    "singularName": "business",
+    "pluralName": "businesses",
+    "displayName": "Negocios",
+    "description": "Empresas y negocios registrados en la plataforma"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "email": {
+      "type": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text"
+    },
+    "main_image_url": {
+      "type": "string"
+    },
+    "gallery_urls": {
+      "type": "json"
+    },
+    "hours": {
+      "type": "json"
+    },
+    "rating": {
+      "type": "decimal",
+      "default": 0,
+      "min": 0,
+      "max": 5
+    },
+    "review_count": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "offer": {
+      "type": "boolean",
+      "default": false
+    },
+    "offer_text": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "supports_delivery": {
+      "type": "boolean",
+      "default": false
+    },
+    "delivery_time": {
+      "type": "string"
+    },
+    "delivery_fee": {
+      "type": "decimal",
+      "min": 0
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "businesses"
+    },
+    "zone": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::zone.zone",
+      "inversedBy": "businesses"
+    },
+    "plan": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business-plan.business-plan"
+    },
+    "offers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::offer.offer",
+      "mappedBy": "business"
+    },
+    "ads": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ad.ad",
+      "mappedBy": "business"
+    },
+    "contact_form_submissions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contact-submission.contact-submission",
+      "mappedBy": "business"
+    }
+  }
+}

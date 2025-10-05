@@ -1,0 +1,62 @@
+{
+  "kind": "collectionType",
+  "collectionName": "business_plans",
+  "info": {
+    "singularName": "business-plan",
+    "pluralName": "business-plans",
+    "displayName": "Business Plan",
+    "description": "Planes de suscripción para negocios"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "price": {
+      "type": "decimal",
+      "required": true,
+      "default": 0
+    },
+    "currency": {
+      "type": "string",
+      "default": "MXN"
+    },
+    "features": {
+      "type": "json"
+    },
+    "duration_days": {
+      "type": "integer",
+      "required": true,
+      "default": 30
+    },
+    "max_ads": {
+      "type": "integer",
+      "default": 0
+    },
+    "max_offers": {
+      "type": "integer",
+      "default": 0
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "sort_order": {
+      "type": "integer",
+      "default": 0
+    },
+    "businesses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::business.business",
+      "mappedBy": "plan"
+    }
+  }
+}

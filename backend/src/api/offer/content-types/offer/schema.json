@@ -1,0 +1,63 @@
+{
+  "kind": "collectionType",
+  "collectionName": "offers",
+  "info": {
+    "singularName": "offer",
+    "pluralName": "offers",
+    "displayName": "Ofertas",
+    "description": "Ofertas especiales de los negocios"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "discount_percentage": {
+      "type": "decimal",
+      "min": 0,
+      "max": 100
+    },
+    "discount_amount": {
+      "type": "decimal",
+      "min": 0
+    },
+    "original_price": {
+      "type": "decimal",
+      "min": 0
+    },
+    "offer_price": {
+      "type": "decimal",
+      "min": 0
+    },
+    "currency": {
+      "type": "string",
+      "default": "MXN"
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "valid_until": {
+      "type": "datetime"
+    },
+    "terms_conditions": {
+      "type": "text"
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business",
+      "inversedBy": "offers"
+    }
+  }
+}

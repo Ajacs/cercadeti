@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contact_submissions",
+  "info": {
+    "singularName": "contact-submission",
+    "pluralName": "contact-submissions",
+    "displayName": "Formularios de Contacto",
+    "description": "Formularios de contacto enviados por usuarios"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string",
+      "required": true
+    },
+    "message": {
+      "type": "text",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "new",
+        "read",
+        "replied",
+        "closed"
+      ],
+      "default": "new",
+      "required": true
+    },
+    "submitted_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "replied_at": {
+      "type": "datetime"
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::pending-business.pending-business",
+      "inversedBy": "contact_form_submissions"
+    },
+    "pending_business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::pending-business.pending-business",
+      "inversedBy": "contact_form_submissions"
+    }
+  }
+}

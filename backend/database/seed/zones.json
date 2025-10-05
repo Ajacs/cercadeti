@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Pedregal",
+    "slug": "pedregal",
+    "description": "Zona residencial de lujo con excelentes restaurantes y servicios",
+    "is_active": true,
+    "sort_order": 1
+  },
+  {
+    "name": "Condesa",
+    "slug": "condesa",
+    "description": "Colonia bohemia con cafés, bares y vida nocturna",
+    "is_active": true,
+    "sort_order": 2
+  },
+  {
+    "name": "Roma Norte",
+    "slug": "roma-norte",
+    "description": "Zona trendy con restaurantes gourmet y boutiques",
+    "is_active": true,
+    "sort_order": 3
+  },
+  {
+    "name": "Polanco",
+    "slug": "polanco",
+    "description": "Distrito comercial y residencial de alta gama",
+    "is_active": true,
+    "sort_order": 4
+  },
+  {
+    "name": "Centro Histórico",
+    "slug": "centro-historico",
+    "description": "Corazón histórico de la ciudad con tradición y modernidad",
+    "is_active": true,
+    "sort_order": 5
+  },
+  {
+    "name": "Coyoacán",
+    "slug": "coyoacan",
+    "description": "Barrio mágico con cultura, arte y gastronomía tradicional",
+    "is_active": true,
+    "sort_order": 6
+  },
+  {
+    "name": "Santa Fe",
+    "slug": "santa-fe",
+    "description": "Centro financiero moderno con oficinas y comercios",
+    "is_active": true,
+    "sort_order": 7
+  }
+]

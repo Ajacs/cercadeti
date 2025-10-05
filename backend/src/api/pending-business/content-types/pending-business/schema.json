@@ -1,0 +1,89 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pending_businesses",
+  "info": {
+    "singularName": "pending-business",
+    "pluralName": "pending-businesses",
+    "displayName": "Negocios Pendientes",
+    "description": "Negocios en espera de aprobación"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text",
+      "required": true
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "validation_status": {
+      "type": "enumeration",
+      "required": true,
+      "default": "pending",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ]
+    },
+    "rejection_reason": {
+      "type": "text"
+    },
+    "submitted_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "reviewed_at": {
+      "type": "datetime"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "pending_businesses"
+    },
+    "custom_category_name": {
+      "type": "string"
+    },
+    "zone": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::zone.zone"
+    },
+    "business_plan": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business-plan.business-plan"
+    },
+    "contact_form_submissions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contact-submission.contact-submission",
+      "mappedBy": "business"
+    }
+  }
+}

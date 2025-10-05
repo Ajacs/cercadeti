@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Sushi Central - Promoción Especial",
+    "description": "Disfruta del mejor sushi con 20% de descuento en pedidos mayores a $500",
+    "image_url": "https://picsum.photos/id/1060/600/400",
+    "link_url": "https://sushicentral.com/promocion",
+    "is_active": true,
+    "valid_until": "2024-12-31T23:59:59Z",
+    "priority": 10,
+    "click_count": 45,
+    "view_count": 1234,
+    "business_id": 1
+  },
+  {
+    "name": "Mercado Express - Delivery Gratis",
+    "description": "Delivery gratis en pedidos mayores a $300. ¡Ordena ya!",
+    "image_url": "https://picsum.photos/id/1078/600/400",
+    "link_url": "https://mercadoexpress.mx/delivery-gratis",
+    "is_active": true,
+    "valid_until": "2024-12-31T23:59:59Z",
+    "priority": 8,
+    "click_count": 67,
+    "view_count": 2156,
+    "business_id": 3
+  },
+  {
+    "name": "Clínica Dental Sonrisa - Limpieza Gratis",
+    "description": "Consulta y limpieza dental gratuita. ¡Agenda tu cita!",
+    "image_url": "https://picsum.photos/id/161/600/400",
+    "link_url": "https://sonrisa.com/consulta-gratis",
+    "is_active": true,
+    "valid_until": "2024-11-30T23:59:59Z",
+    "priority": 12,
+    "click_count": 23,
+    "view_count": 789,
+    "business_id": 6
+  }
+]

@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ads",
+  "info": {
+    "singularName": "ad",
+    "pluralName": "ads",
+    "displayName": "Anuncios",
+    "description": "Anuncios publicitarios de los negocios"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "link_url": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "valid_until": {
+      "type": "datetime"
+    },
+    "priority": {
+      "type": "integer",
+      "default": 0
+    },
+    "click_count": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "view_count": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business",
+      "inversedBy": "ads"
+    }
+  }
+}

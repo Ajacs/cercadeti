@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Descuento en Tacos al Pastor",
+    "description": "2x1 en tacos al pastor todos los martes",
+    "discount_percentage": 50,
+    "original_price": 60,
+    "offer_price": 30,
+    "currency": "MXN",
+    "image_url": "https://picsum.photos/id/20/400/300",
+    "is_active": true,
+    "valid_until": "2024-12-31T23:59:59Z",
+    "terms_conditions": "Válido solo los martes. No acumulable con otras promociones.",
+    "business_id": 2
+  },
+  {
+    "name": "Primera Compra con Descuento",
+    "description": "Descuento del 15% en tu primera compra",
+    "discount_percentage": 15,
+    "original_price": 1000,
+    "offer_price": 850,
+    "currency": "MXN",
+    "image_url": "https://picsum.photos/id/1078/400/300",
+    "is_active": true,
+    "valid_until": "2024-12-31T23:59:59Z",
+    "terms_conditions": "Solo para nuevos clientes. Código: PRIMERA15",
+    "business_id": 3
+  }
+]

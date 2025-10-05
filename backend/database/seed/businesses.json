@@ -1,0 +1,305 @@
+[
+  {
+    "name": "Sushi Central",
+    "description": "El mejor sushi de la ciudad, con ingredientes frescos importados directamente de Japón y recetas innovadoras que combinan tradición y modernidad.",
+    "email": "info@sushicentral.com",
+    "phone": "+52 55 1234 5678",
+    "website": "www.sushicentral.com",
+    "address": "Av. Reforma 123, Col. Juárez, CDMX",
+    "main_image_url": "https://picsum.photos/id/1060/600/400",
+    "gallery_urls": [
+      "https://picsum.photos/id/1060/600/400",
+      "https://picsum.photos/id/1061/600/400",
+      "https://picsum.photos/id/1062/600/400"
+    ],
+    "hours": {
+      "monday": {
+        "open": "12:00",
+        "close": "22:00"
+      },
+      "tuesday": {
+        "open": "12:00",
+        "close": "22:00"
+      },
+      "wednesday": {
+        "open": "12:00",
+        "close": "22:00"
+      },
+      "thursday": {
+        "open": "12:00",
+        "close": "22:00"
+      },
+      "friday": {
+        "open": "12:00",
+        "close": "23:00"
+      },
+      "saturday": {
+        "open": "12:00",
+        "close": "23:00"
+      },
+      "sunday": {
+        "open": "12:00",
+        "close": "21:00"
+      }
+    },
+    "rating": 4.8,
+    "review_count": 156,
+    "featured": true,
+    "offer": false,
+    "is_active": true,
+    "is_verified": true,
+    "supports_delivery": true,
+    "delivery_time": "25-35 min",
+    "delivery_fee": 25,
+    "category_id": 1,
+    "zone_id": 1,
+    "plan_id": 2
+  },
+  {
+    "name": "Tacos \"El Campeón\"",
+    "description": "Los tacos al pastor que te harán volver. Sabor auténtico y tradicional con más de 30 años de experiencia.",
+    "phone": "+52 55 3456 7890",
+    "address": "Esquina Insurgentes y Viaducto, CDMX",
+    "main_image_url": "https://picsum.photos/id/20/600/400",
+    "hours": {
+      "monday": {
+        "open": "18:00",
+        "close": "02:00"
+      },
+      "tuesday": {
+        "open": "18:00",
+        "close": "02:00"
+      },
+      "wednesday": {
+        "open": "18:00",
+        "close": "02:00"
+      },
+      "thursday": {
+        "open": "18:00",
+        "close": "02:00"
+      },
+      "friday": {
+        "open": "18:00",
+        "close": "03:00"
+      },
+      "saturday": {
+        "open": "18:00",
+        "close": "03:00"
+      },
+      "sunday": {
+        "open": "00:00",
+        "close": "00:00",
+        "closed": true
+      }
+    },
+    "rating": 4.9,
+    "review_count": 89,
+    "featured": true,
+    "offer": true,
+    "offer_text": "2x1 en tacos al pastor los martes",
+    "is_active": true,
+    "is_verified": true,
+    "supports_delivery": true,
+    "delivery_time": "20-30 min",
+    "delivery_fee": 15,
+    "category_id": 1,
+    "zone_id": 3,
+    "plan_id": 1
+  },
+  {
+    "name": "Mercado Express",
+    "description": "Tus compras del súper en minutos. Frutas, verduras, carnes y más productos frescos directo a tu puerta.",
+    "email": "contacto@mercadoexpress.mx",
+    "phone": "+52 55 2345 6789",
+    "address": "Calle Comercio 456, Col. Centro, CDMX",
+    "main_image_url": "https://picsum.photos/id/1078/600/400",
+    "hours": {
+      "monday": {
+        "open": "07:00",
+        "close": "23:00"
+      },
+      "tuesday": {
+        "open": "07:00",
+        "close": "23:00"
+      },
+      "wednesday": {
+        "open": "07:00",
+        "close": "23:00"
+      },
+      "thursday": {
+        "open": "07:00",
+        "close": "23:00"
+      },
+      "friday": {
+        "open": "07:00",
+        "close": "23:00"
+      },
+      "saturday": {
+        "open": "07:00",
+        "close": "23:00"
+      },
+      "sunday": {
+        "open": "08:00",
+        "close": "22:00"
+      }
+    },
+    "rating": 4.9,
+    "review_count": 234,
+    "featured": true,
+    "offer": true,
+    "offer_text": "Descuento del 15% en tu primera compra",
+    "is_active": true,
+    "is_verified": true,
+    "supports_delivery": true,
+    "delivery_time": "15-20 min",
+    "delivery_fee": 30,
+    "category_id": 2,
+    "zone_id": 1,
+    "plan_id": 2
+  },
+  {
+    "name": "Plomería Veloz",
+    "description": "Soluciones rápidas y eficientes para cualquier problema de plomería en tu hogar. Servicio 24/7.",
+    "phone": "+52 55 4567 8901",
+    "rating": 4.7,
+    "review_count": 67,
+    "featured": false,
+    "offer": false,
+    "is_active": true,
+    "is_verified": true,
+    "supports_delivery": false,
+    "category_id": 3,
+    "zone_id": 2,
+    "plan_id": 1
+  },
+  {
+    "name": "ReparaTodo",
+    "description": "Electricidad, pintura y reparaciones generales. Profesionales de confianza con más de 10 años de experiencia.",
+    "phone": "+52 55 5678 9012",
+    "rating": 4.8,
+    "review_count": 45,
+    "featured": false,
+    "offer": false,
+    "is_active": true,
+    "is_verified": true,
+    "supports_delivery": false,
+    "category_id": 3,
+    "zone_id": 2,
+    "plan_id": 1
+  },
+  {
+    "name": "Pet Palace",
+    "description": "Todo para tu mejor amigo. Alimento, juguetes y accesorios de la mejor calidad para mascotas.",
+    "address": "Av. Mascotas 789, Polanco",
+    "main_image_url": "https://picsum.photos/id/257/600/400",
+    "rating": 4.8,
+    "review_count": 123,
+    "featured": false,
+    "offer": false,
+    "is_active": true,
+    "is_verified": true,
+    "supports_delivery": true,
+    "delivery_time": "30-45 min",
+    "delivery_fee": 20,
+    "category_id": 4,
+    "zone_id": 4,
+    "plan_id": 1
+  },
+  {
+    "name": "Taxi Express Pedregal",
+    "description": "Servicio de taxi confiable y puntual en la zona del Pedregal. Vehículos cómodos y conductores certificados.",
+    "phone": "+52 55 6789 0123",
+    "address": "Av. Pedregal 789, Pedregal",
+    "hours": {
+      "monday": {
+        "open": "00:00",
+        "close": "23:59"
+      },
+      "tuesday": {
+        "open": "00:00",
+        "close": "23:59"
+      },
+      "wednesday": {
+        "open": "00:00",
+        "close": "23:59"
+      },
+      "thursday": {
+        "open": "00:00",
+        "close": "23:59"
+      },
+      "friday": {
+        "open": "00:00",
+        "close": "23:59"
+      },
+      "saturday": {
+        "open": "00:00",
+        "close": "23:59"
+      },
+      "sunday": {
+        "open": "00:00",
+        "close": "23:59"
+      }
+    },
+    "rating": 4.7,
+    "review_count": 89,
+    "featured": false,
+    "offer": false,
+    "is_active": true,
+    "is_verified": true,
+    "supports_delivery": false,
+    "delivery_time": "5-10 min",
+    "category_id": 5,
+    "zone_id": 1,
+    "plan_id": 1
+  },
+  {
+    "name": "Clínica Dental Sonrisa",
+    "description": "Atención dental integral con tecnología de vanguardia. Especialistas certificados y equipos modernos.",
+    "email": "contacto@sonrisa.com",
+    "phone": "+52 55 7890 1234",
+    "address": "Calle Salud 321, Roma Norte",
+    "website": "www.sonrisa.com",
+    "main_image_url": "https://picsum.photos/id/161/600/400",
+    "hours": {
+      "monday": {
+        "open": "09:00",
+        "close": "18:00"
+      },
+      "tuesday": {
+        "open": "09:00",
+        "close": "18:00"
+      },
+      "wednesday": {
+        "open": "09:00",
+        "close": "18:00"
+      },
+      "thursday": {
+        "open": "09:00",
+        "close": "18:00"
+      },
+      "friday": {
+        "open": "09:00",
+        "close": "16:00"
+      },
+      "saturday": {
+        "open": "09:00",
+        "close": "14:00"
+      },
+      "sunday": {
+        "open": "00:00",
+        "close": "00:00",
+        "closed": true
+      }
+    },
+    "rating": 4.9,
+    "review_count": 78,
+    "featured": true,
+    "offer": false,
+    "is_active": true,
+    "is_verified": true,
+    "supports_delivery": false,
+    "category_id": 6,
+    "zone_id": 3,
+    "plan_id": 2
+  }
+]

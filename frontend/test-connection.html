@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Conexión Strapi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .loading { background-color: #fff3cd; color: #856404; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test de Conexión con Strapi</h1>
+    
+    <div id="results"></div>
+    
+    <button onclick="testConnection()">🔍 Probar Conexión</button>
+    <button onclick="testCategories()">📂 Probar Categorías</button>
+    <button onclick="testBusinesses()">🏢 Probar Negocios</button>
+    <button onclick="clearResults()">🗑️ Limpiar</button>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        function addResult(message, type = 'loading') {
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = message;
+            resultsDiv.appendChild(div);
+        }
+        
+        function clearResults() {
+            resultsDiv.innerHTML = '';
+        }
+        
+        async function testConnection() {
+            addResult('🔄 Probando conexión básica con Strapi...', 'loading');
+            
+            try {
+                const response = await fetch('http://localhost:1337/api/categories');
+                addResult(`📡 Status: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult(`✅ Conexión exitosa! Recibidos ${data.data.length} registros`, 'success');
+                } else {
+                    addResult(`❌ Error en la respuesta: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Error de conexión: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testCategories() {
+            addResult('🔄 Probando endpoint de categorías...', 'loading');
+            
+            try {
+                const response = await fetch('http://localhost:1337/api/categories');
+                const data = await response.json();
+                
+                addResult(`✅ Categorías obtenidas: ${data.data.length}`, 'success');
+                
+                data.data.slice(0, 5).forEach(cat => {
+                    addResult(`   📂 ${cat.name} (${cat.slug})`, 'success');
+                });
+                
+                if (data.data.length > 5) {
+                    addResult(`   ... y ${data.data.length - 5} más`, 'success');
+                }
+            } catch (error) {
+                addResult(`❌ Error obteniendo categorías: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testBusinesses() {
+            addResult('🔄 Probando endpoint de negocios...', 'loading');
+            
+            try {
+                const response = await fetch('http://localhost:1337/api/businesses');
+                const data = await response.json();
+                
+                addResult(`✅ Negocios obtenidos: ${data.data.length}`, 'success');
+                
+                data.data.forEach(business => {
+                    addResult(`   🏢 ${business.name}`, 'success');
+                });
+            } catch (error) {
+                addResult(`❌ Error obteniendo negocios: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test automático al cargar la página
+        window.onload = () => {
+            addResult('🚀 Página cargada. Haz clic en "Probar Conexión" para comenzar.', 'loading');
+        };
+    </script>
+</body>
+</html>

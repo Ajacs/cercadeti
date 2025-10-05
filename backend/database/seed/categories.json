@@ -1,0 +1,110 @@
+[
+  {
+    "name": "Restaurantes",
+    "slug": "restaurantes",
+    "description": "Deliciosos restaurantes y cafeterías",
+    "icon": "UtensilsCrossed",
+    "color": "#FF6B6B",
+    "is_active": true,
+    "sort_order": 1
+  },
+  {
+    "name": "Supermercados",
+    "slug": "supermercados",
+    "description": "Supermercados y tiendas de conveniencia",
+    "icon": "ShoppingCart",
+    "color": "#4ECDC4",
+    "is_active": true,
+    "sort_order": 2
+  },
+  {
+    "name": "Servicios Hogar",
+    "slug": "servicios-hogar",
+    "description": "Plomería, electricidad y reparaciones",
+    "icon": "Wrench",
+    "color": "#45B7D1",
+    "is_active": true,
+    "sort_order": 3
+  },
+  {
+    "name": "Mascotas",
+    "slug": "mascotas",
+    "description": "Productos y servicios para mascotas",
+    "icon": "Heart",
+    "color": "#F39C12",
+    "is_active": true,
+    "sort_order": 4
+  },
+  {
+    "name": "Transporte",
+    "slug": "transporte",
+    "description": "Taxi, Uber, transporte público y servicios de movilidad",
+    "icon": "Car",
+    "color": "#9B59B6",
+    "is_active": true,
+    "sort_order": 5
+  },
+  {
+    "name": "Salud",
+    "slug": "salud",
+    "description": "Clínicas, farmacias y servicios médicos",
+    "icon": "Stethoscope",
+    "color": "#E74C3C",
+    "is_active": true,
+    "sort_order": 6
+  },
+  {
+    "name": "Belleza",
+    "slug": "belleza",
+    "description": "Salones de belleza, barberías y estéticas",
+    "icon": "Scissors",
+    "color": "#E91E63",
+    "is_active": true,
+    "sort_order": 7
+  },
+  {
+    "name": "Deportes",
+    "slug": "deportes",
+    "description": "Gimnasios, tiendas deportivas y actividades físicas",
+    "icon": "Dumbbell",
+    "color": "#FF9800",
+    "is_active": true,
+    "sort_order": 8
+  },
+  {
+    "name": "Educación",
+    "slug": "educacion",
+    "description": "Escuelas, academias y centros de capacitación",
+    "icon": "BookOpen",
+    "color": "#2196F3",
+    "is_active": true,
+    "sort_order": 9
+  },
+  {
+    "name": "Entretenimiento",
+    "slug": "entretenimiento",
+    "description": "Cines, teatros, bares y lugares de diversión",
+    "icon": "Music",
+    "color": "#9C27B0",
+    "is_active": true,
+    "sort_order": 10
+  },
+  {
+    "name": "Fotografía",
+    "slug": "fotografia",
+    "description": "Estudios fotográficos y servicios de imagen",
+    "icon": "Camera",
+    "color": "#607D8B",
+    "is_active": true,
+    "sort_order": 11
+  },
+  {
+    "name": "Moda",
+    "slug": "moda",
+    "description": "Boutiques, tiendas de ropa y accesorios",
+    "icon": "Shirt",
+    "color": "#795548",
+    "is_active": true,
+    "sort_order": 12
+  }
+]
