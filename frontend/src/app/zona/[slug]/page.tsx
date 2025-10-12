@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useBusinessesByZone } from "@/hooks/use-strapi-businesses";
 import { useCategories } from "@/hooks/use-strapi-categories";
+import { useZone } from "@/hooks/use-strapi-zones";
 import type { Business } from "@/types";
 import { BusinessCard } from "@/components/business-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,69 +39,15 @@ function getLucideIcon(iconName: string) {
   return <LucideIcons.HelpCircle className="h-8 w-8" />;
 }
 
-// Mapeo de categorías a iconos, colores e imágenes (fallback)
-const categoryConfig = {
-  'Restaurantes': {
-    icon: UtensilsCrossed,
-    description: 'Deliciosos restaurantes y cafeterías'
-  },
-  'Supermercados': {
-    icon: ShoppingCart,
-    description: 'Supermercados y tiendas de conveniencia'
-  },
-  'Servicios Hogar': {
-    icon: Wrench,
-    description: 'Plomería, electricidad y reparaciones'
-  },
-  'Mascotas': {
-    icon: Heart,
-    description: 'Productos y servicios para mascotas'
-  },
-  'Transporte': {
-    icon: Car,
-    description: 'Taxi, Uber, transporte público y servicios de movilidad'
-  },
-  'Salud': {
-    icon: Stethoscope,
-    description: 'Clínicas, farmacias y servicios médicos'
-  },
-  'Belleza': {
-    icon: Scissors,
-    description: 'Salones de belleza, barberías y estéticas'
-  },
-  'Deportes': {
-    icon: Dumbbell,
-    description: 'Gimnasios, tiendas deportivas y actividades físicas'
-  },
-  'Educación': {
-    icon: BookOpen,
-    description: 'Escuelas, academias y centros de capacitación'
-  },
-  'Entretenimiento': {
-    icon: Music,
-    description: 'Cines, teatros, bares y lugares de diversión'
-  },
-  'Fotografía': {
-    icon: Camera,
-    description: 'Estudios fotográficos y servicios de imagen'
-  },
-  'Moda': {
-    icon: Shirt,
-    description: 'Boutiques, tiendas de ropa y accesorios'
-  }
-};
-
 export default function ZonePage() {
   const params = useParams();
-  const zoneName = params.slug as string;
-  const { businesses, loading, error } = useBusinessesByZone(zoneName);
+  const zoneSlug = params.slug as string;
+  const { zone, loading: zoneLoading, error: zoneError } = useZone(zoneSlug);
+  const { businesses, loading: businessesLoading, error: businessesError } = useBusinessesByZone(zoneSlug);
   const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
 
-  // Convertir el parámetro de URL a formato normal (ej: "roma-norte" -> "Roma Norte")
-  const normalizedZoneName = zoneName
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  const loading = zoneLoading || businessesLoading;
+  const error = zoneError || businessesError;
 
   if (loading) {
     return (
@@ -125,21 +72,8 @@ export default function ZonePage() {
     );
   }
 
-    // Usar categorías de la base de datos o fallback estático
-    const allCategories = categories.length > 0 ? categories : [
-      { id: 1, name: 'Restaurantes', slug: 'restaurantes', icon: 'UtensilsCrossed', color: '#FF6B6B', description: 'Deliciosos restaurantes y cafeterías', is_active: true, sort_order: 1, created_at: '', updated_at: '' },
-      { id: 2, name: 'Supermercados', slug: 'supermercados', icon: 'ShoppingCart', color: '#4ECDC4', description: 'Supermercados y tiendas de conveniencia', is_active: true, sort_order: 2, created_at: '', updated_at: '' },
-      { id: 3, name: 'Servicios Hogar', slug: 'servicios-hogar', icon: 'Wrench', color: '#45B7D1', description: 'Plomería, electricidad y reparaciones', is_active: true, sort_order: 3, created_at: '', updated_at: '' },
-      { id: 4, name: 'Mascotas', slug: 'mascotas', icon: 'Heart', color: '#F39C12', description: 'Productos y servicios para mascotas', is_active: true, sort_order: 4, created_at: '', updated_at: '' },
-      { id: 5, name: 'Transporte', slug: 'transporte', icon: 'Car', color: '#9B59B6', description: 'Taxi, Uber, transporte público y servicios de movilidad', is_active: true, sort_order: 5, created_at: '', updated_at: '' },
-      { id: 6, name: 'Salud', slug: 'salud', icon: 'Stethoscope', color: '#E74C3C', description: 'Clínicas, farmacias y servicios médicos', is_active: true, sort_order: 6, created_at: '', updated_at: '' },
-      { id: 7, name: 'Belleza', slug: 'belleza', icon: 'Scissors', color: '#E91E63', description: 'Salones de belleza, barberías y estéticas', is_active: true, sort_order: 7, created_at: '', updated_at: '' },
-      { id: 8, name: 'Deportes', slug: 'deportes', icon: 'Dumbbell', color: '#FF9800', description: 'Gimnasios, tiendas deportivas y actividades físicas', is_active: true, sort_order: 8, created_at: '', updated_at: '' },
-      { id: 9, name: 'Educación', slug: 'educacion', icon: 'BookOpen', color: '#2196F3', description: 'Escuelas, academias y centros de capacitación', is_active: true, sort_order: 9, created_at: '', updated_at: '' },
-      { id: 10, name: 'Entretenimiento', slug: 'entretenimiento', icon: 'Music', color: '#9C27B0', description: 'Cines, teatros, bares y lugares de diversión', is_active: true, sort_order: 10, created_at: '', updated_at: '' },
-      { id: 11, name: 'Fotografía', slug: 'fotografia', icon: 'Camera', color: '#607D8B', description: 'Estudios fotográficos y servicios de imagen', is_active: true, sort_order: 11, created_at: '', updated_at: '' },
-      { id: 12, name: 'Moda', slug: 'moda', icon: 'Shirt', color: '#795548', description: 'Boutiques, tiendas de ropa y accesorios', is_active: true, sort_order: 12, created_at: '', updated_at: '' }
-    ];
+    // Usar solo categorías de la base de datos
+    const allCategories = categories;
 
     // Contar negocios por categoría (incluyendo categorías sin negocios)
     const categoryCounts = allCategories.map(category => {
@@ -164,10 +98,10 @@ export default function ZonePage() {
       {/* Header simplificado - la información principal ahora está en el navbar */}
       <div className="mb-8 text-center py-16 bg-gradient-to-br from-primary/5 via-primary/3 to-orange-50 rounded-3xl">
         <h1 className="text-4xl lg:text-5xl font-headline font-bold text-primary mb-4">
-          Negocios en {normalizedZoneName}
+          Negocios en {zone?.name || 'Cargando...'}
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Descubre los mejores negocios y servicios de tu zona
+          {zone?.description || 'Descubre los mejores negocios y servicios de tu zona'}
         </p>
       </div>
 
@@ -185,7 +119,7 @@ export default function ZonePage() {
               const categorySlug = categoryData?.slug || (category ? category.toLowerCase().replace(/\s+/g, '-') : 'unknown');
 
               return (
-                <Link key={category} href={`/zona/${zoneName}/${categorySlug}`}>
+                <Link key={category} href={`/zona/${zoneSlug}/${categorySlug}`}>
                   <div className={`flex flex-col items-center justify-center p-6 bg-card hover:bg-muted rounded-2xl transition-all duration-300 h-full shadow-sm hover:shadow-lg border cursor-pointer group ${!hasBusinesses ? 'opacity-75' : ''}`}>
                     {/* Icono de la categoría con color dinámico */}
                     <div
@@ -252,7 +186,7 @@ export default function ZonePage() {
               <MapPin className="h-8 w-8 text-muted-foreground" />
             </div>
             <h3 className="font-headline text-xl mb-2">Sin negocios</h3>
-            <p className="text-muted-foreground">No hay negocios disponibles en {normalizedZoneName}.</p>
+            <p className="text-muted-foreground">No hay negocios disponibles en {zone?.name || 'esta zona'}.</p>
           </Card>
         )}
       </section>

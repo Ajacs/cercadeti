@@ -570,6 +570,7 @@ export interface ApiBusinessBusiness extends Struct.CollectionTypeSchema {
       'api::business.business'
     > &
       Schema.Attribute.Private;
+    main_image: Schema.Attribute.Media<'images'>;
     main_image_url: Schema.Attribute.String;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     offer: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -799,7 +800,7 @@ export interface ApiPendingBusinessPendingBusiness
       'api::pending-business.pending-business'
     > &
       Schema.Attribute.Private;
-    logo_url: Schema.Attribute.String;
+    logo: Schema.Attribute.Media<'images'>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     phone: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;

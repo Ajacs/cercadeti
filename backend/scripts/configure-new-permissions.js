@@ -6,7 +6,7 @@ const ADMIN_PASSWORD = '17dtv0027C';
 
 async function login() {
   try {
-    const response = await fetch(`${STRAPI_URL}/admin/auth/local`, {
+    const response = await fetch(`${STRAPI_URL}/admin/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -18,11 +18,12 @@ async function login() {
     });
 
     if (!response.ok) {
-      throw new Error(`Login failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`Login failed: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
-    return data.token;
+    return data.data.token;
   } catch (error) {
     console.error('Error logging in:', error);
     throw error;
@@ -42,7 +43,8 @@ async function getRoles(token) {
     }
 
     const data = await response.json();
-    return data.roles;
+    // Strapi puede devolver roles en data.roles o data.data
+    return data.roles || data.data || data;
   } catch (error) {
     console.error('Error getting roles:', error);
     throw error;
@@ -91,43 +93,46 @@ async function configurePermissions() {
 
     console.log('🔧 Configuring permissions for new content types...');
 
-    // Configurar permisos para pending-businesses
-    await updatePermissions(token, publicRole.id, 'pending-business', {
-      create: true,
-      find: false,
-      findOne: false,
-      update: false,
-      delete: false
+    // Configurar permisos para pending-businesses (público puede crear)
+    await updatePermissions(token, publicRole.id, 'api::pending-business.pending-business', {
+      create: { enabled: true },
+      find: { enabled: false },
+      findOne: { enabled: false },
+      update: { enabled: false },
+      delete: { enabled: false }
     });
 
-    await updatePermissions(token, authenticatedRole.id, 'pending-business', {
-      create: true,
-      find: true,
-      findOne: true,
-      update: false,
-      delete: false
+    // Autenticados pueden leer y crear
+    await updatePermissions(token, authenticatedRole.id, 'api::pending-business.pending-business', {
+      create: { enabled: true },
+      find: { enabled: true },
+      findOne: { enabled: true },
+      update: { enabled: true },
+      delete: { enabled: false },
+      approve: { enabled: true },
+      reject: { enabled: true }
     });
 
     // Configurar permisos para contact-submissions
-    await updatePermissions(token, publicRole.id, 'contact-submission', {
-      create: true,
-      find: false,
-      findOne: false,
-      update: false,
-      delete: false
+    await updatePermissions(token, publicRole.id, 'api::contact-submission.contact-submission', {
+      create: { enabled: true },
+      find: { enabled: false },
+      findOne: { enabled: false },
+      update: { enabled: false },
+      delete: { enabled: false }
     });
 
-    await updatePermissions(token, authenticatedRole.id, 'contact-submission', {
-      create: true,
-      find: true,
-      findOne: true,
-      update: true,
-      delete: false
+    await updatePermissions(token, authenticatedRole.id, 'api::contact-submission.contact-submission', {
+      create: { enabled: true },
+      find: { enabled: true },
+      findOne: { enabled: true },
+      update: { enabled: true },
+      delete: { enabled: false }
     });
 
     console.log('\n🎉 All permissions configured successfully!');
     console.log('\n📋 Summary:');
-    console.log('   - pending-businesses: Public can create, Authenticated can read');
+    console.log('   - pending-businesses: Public can create, Authenticated can read and manage');
     console.log('   - contact-submissions: Public can create, Authenticated can manage');
 
   } catch (error) {

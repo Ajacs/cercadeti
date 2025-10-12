@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useBusinessByDocumentId } from "@/hooks/use-strapi-businesses";
+import { useZoneContext } from "@/contexts/zone-context";
 import type { Business } from "@/types";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getBusinessImageUrlLarge } from "@/lib/image-utils";
 import {
   Star,
   Clock,
@@ -27,6 +29,7 @@ export default function BusinessDetailPage() {
   const [mounted, setMounted] = useState(false);
 
   const { business, loading, error } = useBusinessByDocumentId(documentId);
+  const { selectedZone } = useZoneContext();
 
   useEffect(() => {
     setMounted(true);
@@ -96,13 +99,18 @@ export default function BusinessDetailPage() {
   };
 
   const hoursFormatted = formatHours(business.hours);
+  const imageUrl = getBusinessImageUrlLarge(business);
+
+  // URL para volver a las categorías de la zona seleccionada
+  const backUrl = selectedZone ? `/zona/${selectedZone.slug}` : '/';
+  const backText = selectedZone ? `Volver a ${selectedZone.name}` : 'Volver al inicio';
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Botón de regreso */}
-      <Link href="/" className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
+      <Link href={backUrl} className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
         <ArrowLeft className="h-4 w-4" />
-        Volver al inicio
+        {backText}
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -112,7 +120,7 @@ export default function BusinessDetailPage() {
             <CardHeader className="p-0">
               <div className="relative">
                 <Image
-                  src={business.main_image_url || '/placeholder-business.jpg'}
+                  src={imageUrl}
                   alt={business.name}
                   width={800}
                   height={400}

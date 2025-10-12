@@ -93,32 +93,47 @@ export class StrapiClient {
     params: Record<string, any> = {}
   ): Promise<StrapiCollection<T>> {
     const searchParams = new URLSearchParams();
-    
+
+    // Función helper para serializar objetos anidados recursivamente
+    const serializeParam = (parentKey: string, value: any) => {
+      if (Array.isArray(value)) {
+        // Para populate y sort, usar índices numéricos
+        if (parentKey === 'populate' || parentKey === 'sort') {
+          value.forEach((v, index) => searchParams.append(`${parentKey}[${index}]`, v));
+        } else {
+          // Para filtros, usar $in
+          value.forEach(v => searchParams.append(`${parentKey}[$in]`, v));
+        }
+      } else if (typeof value === 'object' && value !== null) {
+        // Para objetos anidados, procesar recursivamente
+        Object.entries(value).forEach(([subKey, subValue]) => {
+          const newKey = `${parentKey}[${subKey}]`;
+          if (typeof subValue === 'object' && subValue !== null && !Array.isArray(subValue)) {
+            // Recursión para niveles más profundos
+            serializeParam(newKey, subValue);
+          } else if (Array.isArray(subValue)) {
+            // Arrays dentro de objetos
+            subValue.forEach((v, index) => searchParams.append(`${newKey}[${index}]`, String(v)));
+          } else {
+            // Valor primitivo
+            searchParams.append(newKey, String(subValue));
+          }
+        });
+      } else {
+        searchParams.append(parentKey, String(value));
+      }
+    };
+
     // Agregar parámetros de consulta
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
-        if (Array.isArray(value)) {
-          // Para populate y sort, usar índices numéricos
-          if (key === 'populate' || key === 'sort') {
-            value.forEach((v, index) => searchParams.append(`${key}[${index}]`, v));
-          } else {
-            // Para filtros, usar $in
-            value.forEach(v => searchParams.append(`${key}[$in]`, v));
-          }
-        } else if (typeof value === 'object') {
-          // Para filtros complejos como populate, sort, etc.
-          Object.entries(value).forEach(([subKey, subValue]) => {
-            searchParams.append(`${key}[${subKey}]`, subValue);
-          });
-        } else {
-          searchParams.append(key, value);
-        }
+        serializeParam(key, value);
       }
     });
 
     const queryString = searchParams.toString();
     const endpoint = queryString ? `/${contentType}?${queryString}` : `/${contentType}`;
-    
+
     return this.request<StrapiCollection<T>>(endpoint);
   }
 
@@ -370,28 +385,28 @@ export const StrapiAPI = {
   // Businesses
   businesses: {
     getAll: (params?: Record<string, any>) => strapi.getCollection('businesses', {
-      populate: ['category', 'zone', 'plan', 'offers', 'ads'],
+      populate: ['category', 'zone', 'plan', 'offers', 'ads', 'main_image'],
       ...params
     }),
-    getById: (id: number) => strapi.getItem('businesses', id, {
-      populate: ['category', 'zone', 'plan', 'offers', 'ads']
+    getById: (id: number | string) => strapi.getItem('businesses', id, {
+      populate: ['category', 'zone', 'plan', 'offers', 'ads', 'main_image']
     }),
     getByCategory: (categoryId: number) => strapi.getCollection('businesses', {
       filters: { category: categoryId },
-      populate: ['category', 'zone', 'plan']
+      populate: ['category', 'zone', 'plan', 'main_image']
     }),
     getByZone: (zoneId: number) => strapi.getCollection('businesses', {
       filters: { zone: zoneId },
-      populate: ['category', 'zone', 'plan']
+      populate: ['category', 'zone', 'plan', 'main_image']
     }),
     getFeatured: () => strapi.getCollection('businesses', {
       filters: { featured: true, is_active: true },
-      populate: ['category', 'zone', 'plan'],
+      populate: ['category', 'zone', 'plan', 'main_image'],
       sort: ['rating:desc']
     }),
     getActive: () => strapi.getCollection('businesses', {
       filters: { is_active: true },
-      populate: ['category', 'zone', 'plan'],
+      populate: ['category', 'zone', 'plan', 'main_image'],
       sort: ['rating:desc']
     }),
     search: (query: string) => strapi.getCollection('businesses', {
@@ -402,7 +417,7 @@ export const StrapiAPI = {
         ],
         is_active: true
       },
-      populate: ['category', 'zone', 'plan']
+      populate: ['category', 'zone', 'plan', 'main_image']
     }),
   },
 

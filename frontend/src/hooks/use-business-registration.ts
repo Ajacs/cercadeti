@@ -54,9 +54,9 @@ export function useBusinessRegistration(): UseBusinessRegistrationReturn {
       // Agregar datos del negocio
       formData.append('data', JSON.stringify(registrationData));
 
-      // Si hay logo, agregarlo
+      // Si hay logo, agregarlo (sin el prefijo 'files.')
       if (data.logo) {
-        formData.append('files.logo', data.logo);
+        formData.append('logo', data.logo);
       }
 
       // Enviar a Strapi

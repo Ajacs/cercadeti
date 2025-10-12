@@ -34,6 +34,12 @@
     "main_image_url": {
       "type": "string"
     },
+    "main_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
     "gallery_urls": {
       "type": "json"
     },

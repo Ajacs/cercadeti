@@ -1,18 +1,25 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useBusinesses } from "@/hooks/use-strapi-businesses";
+import { useBusinessesByZone } from "@/hooks/use-strapi-businesses";
 import { HeroDynamic } from "@/components/hero-dynamic";
 import { CategoryMosaic } from "@/components/category-mosaic";
 import { ContentSections } from "@/components/content-sections";
 import { useAds } from "@/hooks/use-strapi-ads";
+import { useZoneContext } from "@/contexts/zone-context";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedZone, setSelectedZone] = useState("pedregal");
-  const { businesses, loading, error } = useBusinesses();
-  const { ads: premiumAds, loading: adsLoading, error: adsError } = useAds();
   const categoriesRef = useRef<HTMLDivElement>(null);
+
+  // Usar el contexto de zona global
+  const { selectedZone, loading: zoneLoading } = useZoneContext();
+
+  // Cargar negocios de la zona seleccionada
+  const { businesses, loading: businessesLoading, error } = useBusinessesByZone(selectedZone?.slug || "");
+  const { ads: premiumAds, loading: adsLoading, error: adsError } = useAds();
+
+  const loading = zoneLoading || businessesLoading;
 
   const scrollToCategories = () => {
     categoriesRef.current?.scrollIntoView({
@@ -54,7 +61,7 @@ export default function Home() {
         <div ref={categoriesRef}>
           <CategoryMosaic
             onSelectCategory={setSelectedCategory}
-            selectedZone={selectedZone}
+            selectedZone={selectedZone?.slug || ""}
           />
         </div>
 

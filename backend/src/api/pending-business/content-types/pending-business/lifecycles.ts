@@ -7,20 +7,33 @@ export default {
   async beforeUpdate(event) {
     const { data, where } = event.params;
 
+    console.log("LIFECYCLE beforeUpdate called");
+    console.log("Data:", JSON.stringify(data));
+    console.log("Where:", JSON.stringify(where));
+
     // Solo proceder si el validation_status está cambiando a 'approved'
     if (data.validation_status === 'approved') {
+      console.log("Status is approved, processing...");
+
       // Obtener el negocio pendiente completo con sus relaciones
-      const pendingBusiness = await strapi.db.query('api::pending-business.pending-business').findOne({
-        where: { id: where.id },
-        populate: ['category', 'zone', 'business_plan']
-      });
+      const pendingBusiness = await strapi.entityService.findOne(
+        'api::pending-business.pending-business',
+        where.id,
+        {
+          populate: ['category', 'zone', 'business_plan', 'logo']
+        }
+      );
+
+      console.log("Pending business:", JSON.stringify(pendingBusiness));
 
       if (!pendingBusiness) {
+        console.log("Pending business not found");
         return;
       }
 
       // Verificar si ya fue procesado
       if ((pendingBusiness as any).validation_status === 'approved') {
+        console.log("Already approved, skipping");
         return;
       }
 
@@ -33,7 +46,6 @@ export default {
           phone: pendingBusiness.phone,
           website: pendingBusiness.website || '',
           address: pendingBusiness.address,
-          main_image_url: pendingBusiness.logo_url || '',
           is_active: true,
           is_verified: true,
           featured: false,
@@ -41,7 +53,7 @@ export default {
           delivery_fee: 0
         };
 
-        // Agregar relaciones si existen
+        // Agregar relaciones si existen (usando ID numérico para entityService)
         if ((pendingBusiness as any).category?.id) {
           businessData.category = (pendingBusiness as any).category.id;
         }
@@ -54,22 +66,32 @@ export default {
           businessData.plan = (pendingBusiness as any).business_plan.id;
         }
 
-        // Crear el negocio
-        await strapi.db.query('api::business.business').create({
+        // Agregar logo si existe
+        if ((pendingBusiness as any).logo?.id) {
+          businessData.main_image = (pendingBusiness as any).logo.id;
+        }
+
+        console.log("Creating business with data:", JSON.stringify(businessData));
+
+        // Crear el negocio usando entityService (más estable que documents API)
+        const newBusiness = await strapi.entityService.create('api::business.business', {
           data: businessData,
-          populate: ['category', 'zone', 'plan']
+          populate: ['category', 'zone', 'plan', 'main_image']
         });
+
+        console.log("Business created successfully:", JSON.stringify(newBusiness));
 
         // Actualizar el pending business con la fecha de revisión
         data.reviewed_at = new Date().toISOString();
 
       } catch (error) {
+        console.error("Error in lifecycle:", error);
         throw error;
       }
     }
   },
 
   async afterUpdate(event) {
-    // Lifecycle completed
+    console.log("LIFECYCLE afterUpdate called");
   }
 };

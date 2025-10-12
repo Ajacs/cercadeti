@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useBusinessesSimple } from "@/hooks/use-businesses-simple";
 import { useCategory } from "@/hooks/use-strapi-categories";
 import { useZones } from "@/hooks/use-strapi-zones";
@@ -9,6 +10,7 @@ import type { Business } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getBusinessImageUrl } from "@/lib/image-utils";
 import {
   ArrowLeft,
   MapPin,
@@ -196,13 +198,19 @@ export default function CategoryDetailPage() {
         {/* Businesses Grid */}
         {businesses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {businesses.map((business) => (
+            {businesses.map((business) => {
+              const imageUrl = getBusinessImageUrl(business);
+              const hasImage = imageUrl !== '/placeholder-business.jpg';
+
+              return (
               <Card key={business.id} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg flex flex-col h-full">
                 <div className="relative overflow-hidden rounded-t-2xl flex-shrink-0">
-                  {business.main_image_url ? (
-                    <img
-                      src={business.main_image_url}
+                  {hasImage ? (
+                    <Image
+                      src={imageUrl}
                       alt={business.name}
+                      width={600}
+                      height={400}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
@@ -313,7 +321,8 @@ export default function CategoryDetailPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <Card className="text-center py-12">

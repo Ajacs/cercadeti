@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, Clock, Truck, MapPin, Phone, Globe } from "lucide-react";
+import { getBusinessImageUrl } from "@/lib/image-utils";
 
 interface BusinessCardProps {
   business: Business;
@@ -15,6 +16,7 @@ interface BusinessCardProps {
 }
 
 export function BusinessCard({ business, showOfferBadge = false }: BusinessCardProps) {
+  const imageUrl = getBusinessImageUrl(business);
 
   return (
     <Link href={`/business/${business.documentId || business.id}`} className="block h-full">
@@ -22,7 +24,7 @@ export function BusinessCard({ business, showOfferBadge = false }: BusinessCardP
         <CardHeader className="p-0 relative flex-shrink-0">
           <div className="overflow-hidden rounded-t-2xl">
             <Image
-              src={business.main_image_url || '/placeholder-business.jpg'}
+              src={imageUrl}
               alt={business.name}
               width={600}
               height={400}

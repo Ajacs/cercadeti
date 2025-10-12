@@ -34,8 +34,11 @@
       "type": "text",
       "required": true
     },
-    "logo_url": {
-      "type": "string"
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
     },
     "validation_status": {
       "type": "enumeration",

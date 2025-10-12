@@ -8,7 +8,7 @@ export default factories.createCoreController('api::pending-business.pending-bus
   async find(ctx) {
     // Asegurar que siempre se incluyan las relaciones
     if (!ctx.query.populate) {
-      ctx.query.populate = { category: true, zone: true, business_plan: true };
+      ctx.query.populate = { category: true, zone: true, business_plan: true, logo: true };
     }
     return await super.find(ctx);
   },
@@ -16,7 +16,7 @@ export default factories.createCoreController('api::pending-business.pending-bus
   async findOne(ctx) {
     // Asegurar que siempre se incluyan las relaciones
     if (!ctx.query.populate) {
-      ctx.query.populate = { category: true, zone: true, business_plan: true };
+      ctx.query.populate = { category: true, zone: true, business_plan: true, logo: true };
     }
     return await super.findOne(ctx);
   },
@@ -24,6 +24,9 @@ export default factories.createCoreController('api::pending-business.pending-bus
   async update(ctx) {
     const { id } = ctx.params;
     let { data } = ctx.request.body;
+
+    console.log("UPDATE called with id:", id);
+    console.log("UPDATE data:", JSON.stringify(data));
 
     // Limpiar relaciones vacías que vienen como { connect: [], disconnect: [] }
     // Esto es un formato de Strapi v5 admin que causa problemas
@@ -50,15 +53,21 @@ export default factories.createCoreController('api::pending-business.pending-bus
     // Actualizar ctx.request.body con los datos limpios
     ctx.request.body.data = cleanedData;
 
+    console.log("Cleaned data:", JSON.stringify(cleanedData));
+    console.log("Validation status:", cleanedData.validation_status);
+
     // Si el validation_status está cambiando a "approved", crear el negocio automáticamente
     if (cleanedData.validation_status === 'approved') {
+      console.log("Status is approved, creating business...");
       // Obtener el pending business actual usando documentId
       const pendingBusiness = await strapi.documents('api::pending-business.pending-business').findOne({
         documentId: id,
-        populate: ['category', 'zone', 'business_plan']
+        populate: ['category', 'zone', 'business_plan', 'logo']
       });
 
       if (pendingBusiness) {
+        console.log("Pending business found:", JSON.stringify(pendingBusiness));
+
         // Preparar datos para crear el negocio
         const businessData: any = {
           name: pendingBusiness.name,
@@ -67,7 +76,6 @@ export default factories.createCoreController('api::pending-business.pending-bus
           phone: pendingBusiness.phone,
           website: pendingBusiness.website || '',
           address: pendingBusiness.address,
-          main_image_url: pendingBusiness.logo_url || '',
           is_active: true,
           is_verified: true,
           featured: false,
@@ -75,32 +83,52 @@ export default factories.createCoreController('api::pending-business.pending-bus
           delivery_fee: 0
         };
 
-        // Agregar relaciones si existen
-        if ((pendingBusiness as any).category?.id) {
-          businessData.category = (pendingBusiness as any).category.id;
+        // Agregar relaciones si existen (usando documentId para Strapi v5)
+        if ((pendingBusiness as any).category?.documentId) {
+          businessData.category = {
+            connect: [(pendingBusiness as any).category.documentId]
+          };
         }
 
-        if ((pendingBusiness as any).zone?.id) {
-          businessData.zone = (pendingBusiness as any).zone.id;
+        if ((pendingBusiness as any).zone?.documentId) {
+          businessData.zone = {
+            connect: [(pendingBusiness as any).zone.documentId]
+          };
         }
 
-        if ((pendingBusiness as any).business_plan?.id) {
-          businessData.plan = (pendingBusiness as any).business_plan.id;
+        if ((pendingBusiness as any).business_plan?.documentId) {
+          businessData.plan = {
+            connect: [(pendingBusiness as any).business_plan.documentId]
+          };
         }
+
+        // Agregar logo si existe
+        if ((pendingBusiness as any).logo?.documentId) {
+          businessData.main_image = {
+            connect: [(pendingBusiness as any).logo.documentId]
+          };
+        }
+
+        console.log("Business data to create:", JSON.stringify(businessData));
 
         try {
           // Crear el negocio usando Document Service API
           const newBusiness = await strapi.documents('api::business.business').create({
             data: businessData,
-            populate: ['category', 'zone', 'plan']
+            populate: ['category', 'zone', 'plan', 'main_image']
           });
+
+          console.log("Business created successfully:", JSON.stringify(newBusiness));
 
           // Actualizar el pending business con la fecha de revisión
           cleanedData.reviewed_at = new Date().toISOString();
           ctx.request.body.data = cleanedData;
         } catch (error) {
+          console.error("Error creating business:", error);
           throw error; // Re-throw para que el usuario vea el error
         }
+      } else {
+        console.log("Pending business NOT found with documentId:", id);
       }
     }
 
@@ -109,6 +137,9 @@ export default factories.createCoreController('api::pending-business.pending-bus
   },
 
   async create(ctx) {
+    console.log("CONTEXT: ", JSON.stringify(ctx.request.body));
+    console.log("FILES: ", JSON.stringify(ctx.request.files));
+
     try {
       // Obtener datos del request
       let data = ctx.request.body.data;
@@ -126,6 +157,8 @@ export default factories.createCoreController('api::pending-business.pending-bus
         return ctx.badRequest('Missing data in request body');
       }
 
+      console.log("DATA", JSON.stringify(data));
+
       // Preparar los datos para crear el negocio pendiente
       const pendingBusinessData: any = {
         name: data.name,
@@ -134,28 +167,85 @@ export default factories.createCoreController('api::pending-business.pending-bus
         phone: data.phone,
         website: data.website || '',
         address: data.address,
-        logo_url: data.logo_url || '',
         custom_category_name: data.custom_category_name || '',
         submitted_at: data.submitted_at || new Date().toISOString(),
-        validation_status: data.validation_status || 'pending',
-        // Relaciones - formato simple para Strapi v5
-        category: data.category ? parseInt(data.category) : null,
-        zone: data.zone ? parseInt(data.zone) : null,
-        business_plan: data.business_plan ? parseInt(data.business_plan) : null
+        validation_status: data.validation_status || 'pending'
       };
+
+      // Manejar relaciones - Strapi v5 necesita conectar por documentId
+      if (data.category) {
+        const categoryId = typeof data.category === 'string' ? parseInt(data.category) : data.category;
+        if (!isNaN(categoryId)) {
+          // Obtener el documentId de la categoría usando su ID numérico
+          const category = await strapi.entityService.findOne('api::category.category', categoryId);
+          if (category && (category as any).documentId) {
+            pendingBusinessData.category = {
+              connect: [(category as any).documentId]
+            };
+          }
+        }
+      }
+
+      if (data.zone) {
+        const zoneId = typeof data.zone === 'string' ? parseInt(data.zone) : data.zone;
+        if (!isNaN(zoneId)) {
+          const zone = await strapi.entityService.findOne('api::zone.zone', zoneId);
+          if (zone && (zone as any).documentId) {
+            pendingBusinessData.zone = {
+              connect: [(zone as any).documentId]
+            };
+          }
+        }
+      }
+
+      if (data.business_plan) {
+        const planId = typeof data.business_plan === 'string' ? parseInt(data.business_plan) : data.business_plan;
+        if (!isNaN(planId)) {
+          const plan = await strapi.entityService.findOne('api::business-plan.business-plan', planId);
+          if (plan && (plan as any).documentId) {
+            pendingBusinessData.business_plan = {
+              connect: [(plan as any).documentId]
+            };
+          }
+        }
+      }
 
       // Validar campos requeridos
       if (!pendingBusinessData.name || !pendingBusinessData.email || !pendingBusinessData.phone || !pendingBusinessData.address) {
         return ctx.badRequest('Missing required fields: name, email, phone, address');
       }
 
+      // Crear el negocio pendiente
       const entity = await strapi.entityService.create('api::pending-business.pending-business', {
         data: pendingBusinessData,
-        populate: ['category', 'zone', 'business_plan']
+        populate: ['category', 'zone', 'business_plan', 'logo']
       });
+
+      // Si hay un archivo de logo, asociarlo
+      if (ctx.request.files && ctx.request.files.logo) {
+        const logoFile = ctx.request.files.logo;
+
+        // Subir el archivo usando el plugin de upload de Strapi
+        const uploadedFiles = await strapi.plugins.upload.services.upload.upload({
+          data: {
+            refId: entity.id,
+            ref: 'api::pending-business.pending-business',
+            field: 'logo'
+          },
+          files: logoFile
+        });
+
+        // Recargar la entidad con el logo asociado
+        const updatedEntity = await strapi.entityService.findOne('api::pending-business.pending-business', entity.id, {
+          populate: ['category', 'zone', 'business_plan', 'logo']
+        });
+
+        return { data: updatedEntity };
+      }
 
       return { data: entity };
     } catch (error) {
+      console.error('Error creating pending business:', error);
       ctx.throw(500, error.message || 'Internal Server Error');
     }
   },
@@ -163,10 +253,10 @@ export default factories.createCoreController('api::pending-business.pending-bus
   async approve(ctx) {
     try {
       const { id } = ctx.params;
-      
+
       // Obtener el negocio pendiente
       const pendingBusiness = await strapi.entityService.findOne('api::pending-business.pending-business', id, {
-        populate: ['category', 'zone', 'business_plan']
+        populate: ['category', 'zone', 'business_plan', 'logo']
       });
 
       if (!pendingBusiness) {
@@ -181,18 +271,40 @@ export default factories.createCoreController('api::pending-business.pending-bus
         phone: pendingBusiness.phone,
         website: pendingBusiness.website,
         address: pendingBusiness.address,
-        main_image_url: pendingBusiness.logo_url,
-        category: (pendingBusiness as any).category?.id || null,
-        zone: (pendingBusiness as any).zone?.id || null,
-        plan: (pendingBusiness as any).business_plan?.id || null,
         is_active: true,
         is_verified: true,
         featured: false
       };
 
+      // Agregar relaciones si existen (usando documentId para Strapi v5)
+      if ((pendingBusiness as any).category?.documentId) {
+        businessData.category = {
+          connect: [(pendingBusiness as any).category.documentId]
+        };
+      }
+
+      if ((pendingBusiness as any).zone?.documentId) {
+        businessData.zone = {
+          connect: [(pendingBusiness as any).zone.documentId]
+        };
+      }
+
+      if ((pendingBusiness as any).business_plan?.documentId) {
+        businessData.plan = {
+          connect: [(pendingBusiness as any).business_plan.documentId]
+        };
+      }
+
+      // Agregar logo si existe
+      if ((pendingBusiness as any).logo?.documentId) {
+        businessData.main_image = {
+          connect: [(pendingBusiness as any).logo.documentId]
+        };
+      }
+
       const newBusiness = await strapi.entityService.create('api::business.business', {
         data: businessData,
-        populate: ['category', 'zone', 'plan']
+        populate: ['category', 'zone', 'plan', 'main_image']
       });
 
       // Actualizar el estado del negocio pendiente
@@ -204,7 +316,7 @@ export default factories.createCoreController('api::pending-business.pending-bus
         }
       });
 
-      return { 
+      return {
         data: {
           pending: pendingBusiness,
           business: newBusiness,

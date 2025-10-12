@@ -4,6 +4,8 @@ import { HeaderWithSearch } from '@/components/layout/header-with-search';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { ZoneProvider } from '@/contexts/zone-context';
+import { QueryProvider } from '@/components/providers/query-provider';
 
 export const metadata: Metadata = {
   title: 'CercaDeTi - Explora los negocios cerca de ti',
@@ -58,11 +60,15 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="CercaDeTi" />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen" suppressHydrationWarning>
-        <HeaderWithSearch />
-        <main className="flex-grow">{children}</main>
-        <Footer />
-        <Toaster />
-        <SpeedInsights />
+        <QueryProvider>
+          <ZoneProvider>
+            <HeaderWithSearch />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+            <Toaster />
+            <SpeedInsights />
+          </ZoneProvider>
+        </QueryProvider>
       </body>
     </html>
   );

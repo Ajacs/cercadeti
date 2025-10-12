@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useNavbarSearch } from "@/hooks/use-navbar-search";
+import { useZones } from "@/hooks/use-strapi-zones";
+import { useZoneContext } from "@/contexts/zone-context";
 import {
   MapPin,
   ChevronDown,
@@ -34,12 +36,15 @@ export function HeaderWithSearch() {
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  // Hook de búsqueda en tiempo real
-  const { businesses, loading, error } = useNavbarSearch(searchTerm, "pedregal");
+  // Contexto de zona global
+  const { selectedZone, setSelectedZone, loading: zoneContextLoading } = useZoneContext();
 
-  // Detectar si estamos en una página de zona
-  const isZonePage = pathname.startsWith('/zona/');
-  const currentZone = isZonePage ? pathname.split('/')[2] : null;
+  // Hook de búsqueda en tiempo real (usa la zona seleccionada)
+  const { businesses, loading, error } = useNavbarSearch(searchTerm, selectedZone?.slug || "");
+
+  // Hook para cargar todas las zonas disponibles
+  const { zones, loading: zonesLoading } = useZones();
+  const activeZones = zones.filter(z => z.is_active);
 
   // Mostrar resultados cuando hay término de búsqueda
   useEffect(() => {
@@ -62,9 +67,9 @@ export function HeaderWithSearch() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      // Redirigir a la página de búsqueda con el término
-      window.location.href = `/search?q=${encodeURIComponent(searchTerm.trim())}&zone=pedregal`;
+    if (searchTerm.trim() && selectedZone) {
+      // Redirigir a la página de búsqueda con el término y la zona seleccionada
+      window.location.href = `/search?q=${encodeURIComponent(searchTerm.trim())}&zone=${selectedZone.slug}`;
     }
   };
 
@@ -195,7 +200,7 @@ export function HeaderWithSearch() {
 
           {/* Navegación derecha */}
           <div className="flex items-center gap-4">
-            {/* Nuestras Zonas */}
+            {/* Selector de Zona */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -203,34 +208,34 @@ export function HeaderWithSearch() {
                   className="text-sm font-bold text-primary transition-colors hover:text-primary hover:bg-transparent focus:text-primary focus:bg-transparent flex items-center gap-1"
                 >
                   <MapPin className="h-4 w-4" />
-                  El Pedregal
+                  {zoneContextLoading || zonesLoading ? 'Cargando...' : selectedZone ? selectedZone.name : 'Selecciona tu zona'}
                   <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/zona/pedregal"
-                    className="hover:bg-muted/50 hover:text-foreground focus:bg-muted/50 focus:text-foreground font-semibold text-primary"
-                  >
-                    El Pedregal
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem disabled className="text-muted-foreground">
-                  Roma Norte - Muy Pronto
-                </DropdownMenuItem>
-                <DropdownMenuItem disabled className="text-muted-foreground">
-                  Condesa - Muy Pronto
-                </DropdownMenuItem>
-                <DropdownMenuItem disabled className="text-muted-foreground">
-                  Polanco - Muy Pronto
-                </DropdownMenuItem>
-                <DropdownMenuItem disabled className="text-muted-foreground">
-                  Coyoacán - Muy Pronto
-                </DropdownMenuItem>
-                <DropdownMenuItem disabled className="text-muted-foreground">
-                  Centro - Muy Pronto
-                </DropdownMenuItem>
+                {zonesLoading ? (
+                  <DropdownMenuItem disabled className="text-muted-foreground">
+                    Cargando zonas...
+                  </DropdownMenuItem>
+                ) : activeZones.length > 0 ? (
+                  activeZones.map(zone => (
+                    <DropdownMenuItem
+                      key={zone.id}
+                      onClick={() => setSelectedZone(zone)}
+                      className={cn(
+                        "cursor-pointer hover:bg-muted/50 hover:text-foreground focus:bg-muted/50 focus:text-foreground",
+                        selectedZone?.id === zone.id && "font-semibold text-primary bg-muted/30"
+                      )}
+                    >
+                      {zone.name}
+                      {selectedZone?.id === zone.id && " ✓"}
+                    </DropdownMenuItem>
+                  ))
+                ) : (
+                  <DropdownMenuItem disabled className="text-muted-foreground">
+                    No hay zonas disponibles
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
 
