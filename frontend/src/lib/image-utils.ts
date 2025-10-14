@@ -17,17 +17,21 @@ export function getBusinessImageUrl(business: Business): string {
 
     // Intentar obtener el formato medium (mejor para cards)
     if (image.formats?.medium?.url) {
-      return `${strapiUrl}${image.formats.medium.url}`;
+      const url = image.formats.medium.url;
+      // Si la URL ya es completa (empieza con http/https), usarla tal cual
+      return url.startsWith('http') ? url : `${strapiUrl}${url}`;
     }
 
     // Si no hay medium, intentar small
     if (image.formats?.small?.url) {
-      return `${strapiUrl}${image.formats.small.url}`;
+      const url = image.formats.small.url;
+      return url.startsWith('http') ? url : `${strapiUrl}${url}`;
     }
 
     // Si no hay formatos, usar la URL original
     if (image.url) {
-      return `${strapiUrl}${image.url}`;
+      const url = image.url;
+      return url.startsWith('http') ? url : `${strapiUrl}${url}`;
     }
   }
 
@@ -58,17 +62,20 @@ export function getBusinessImageUrlLarge(business: Business): string {
 
     // Intentar obtener el formato large primero
     if (image.formats?.large?.url) {
-      return `${strapiUrl}${image.formats.large.url}`;
+      const url = image.formats.large.url;
+      return url.startsWith('http') ? url : `${strapiUrl}${url}`;
     }
 
     // Si no hay large, intentar medium
     if (image.formats?.medium?.url) {
-      return `${strapiUrl}${image.formats.medium.url}`;
+      const url = image.formats.medium.url;
+      return url.startsWith('http') ? url : `${strapiUrl}${url}`;
     }
 
     // Si no hay formatos, usar la URL original
     if (image.url) {
-      return `${strapiUrl}${image.url}`;
+      const url = image.url;
+      return url.startsWith('http') ? url : `${strapiUrl}${url}`;
     }
   }
 

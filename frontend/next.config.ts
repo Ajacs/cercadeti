@@ -42,6 +42,18 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'refined-symphony-7bb4c4840e.strapiapp.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'refined-symphony-7bb4c4840e.media.strapiapp.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   async headers() {
