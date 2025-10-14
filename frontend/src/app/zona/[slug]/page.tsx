@@ -75,15 +75,17 @@ export default function ZonePage() {
     // Usar solo categorías de la base de datos
     const allCategories = categories;
 
-    // Contar negocios por categoría (incluyendo categorías sin negocios)
-    const categoryCounts = allCategories.map(category => {
-      const count = businesses.filter(business => business.category?.slug === category.slug).length;
-      return {
-        category: category.name,
-        count,
-        categoryData: category
-      };
-    });
+    // Contar negocios por categoría y filtrar solo las que tienen negocios en esta zona
+    const categoryCounts = allCategories
+      .map(category => {
+        const count = businesses.filter(business => business.category?.slug === category.slug).length;
+        return {
+          category: category.name,
+          count,
+          categoryData: category
+        };
+      })
+      .filter(categoryCount => categoryCount.count > 0); // Solo mostrar categorías con negocios
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -110,6 +112,7 @@ export default function ZonePage() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold mb-6 text-center">Categorías</h2>
 
+        {categoryCounts.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {categoryCounts.map(({ category, count, categoryData }) => {
               const hasBusinesses = count > 0;
@@ -164,6 +167,17 @@ export default function ZonePage() {
               );
             })}
           </div>
+        ) : (
+          <Card className="p-8 text-center">
+            <div className="p-4 bg-muted/50 rounded-full w-fit mx-auto mb-4">
+              <Building2 className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h3 className="font-headline text-xl mb-2">Sin categorías disponibles</h3>
+            <p className="text-muted-foreground">
+              No existen categorías con negocios registrados en {zone?.name || 'esta zona'} por el momento.
+            </p>
+          </Card>
+        )}
       </section>
 
       {/* Sección "Explora tu alrededor" - 4 cuadros en una fila */}

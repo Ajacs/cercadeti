@@ -53,6 +53,27 @@ export function CategoryMosaic({ onSelectCategory, selectedZone = "pedregal" }: 
     );
   }
 
+  // Si no hay categorías disponibles
+  if (categories.length === 0) {
+    return (
+      <section className="py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="bg-gradient-to-br from-gray-50/80 via-white to-gray-50/60 rounded-3xl border border-gray-200/60 shadow-sm backdrop-blur-sm p-8">
+            <div className="text-center">
+              <div className="p-4 bg-muted/50 rounded-full w-fit mx-auto mb-4">
+                <LucideIcons.Grid3X3 className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="font-headline text-xl mb-2">Sin categorías disponibles</h3>
+              <p className="text-muted-foreground">
+                No existen categorías registradas en este momento. Los negocios podrán registrarse pronto.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 bg-gradient-to-b from-white to-gray-50/50 rounded-3xl">
       <div className="px-4 md:px-8">

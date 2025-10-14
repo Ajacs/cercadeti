@@ -22,13 +22,22 @@ const categories = [
     sort_order: 2
   },
   {
+    name: "Abarrotes",
+    slug: "abarrotes",
+    description: "Tiendas de abarrotes y productos básicos",
+    icon: "Store",
+    color: "#FFB74D",
+    is_active: true,
+    sort_order: 3
+  },
+  {
     name: "Servicios Hogar",
     slug: "servicios-hogar",
     description: "Servicios para el hogar y mantenimiento",
     icon: "Home",
     color: "#45B7D1",
     is_active: true,
-    sort_order: 3
+    sort_order: 4
   },
   {
     name: "Mascotas",
@@ -37,7 +46,7 @@ const categories = [
     icon: "Heart",
     color: "#96CEB4",
     is_active: true,
-    sort_order: 4
+    sort_order: 5
   },
   {
     name: "Transporte",
@@ -46,7 +55,7 @@ const categories = [
     icon: "Car",
     color: "#FFEAA7",
     is_active: true,
-    sort_order: 5
+    sort_order: 6
   },
   {
     name: "Salud",
@@ -55,7 +64,7 @@ const categories = [
     icon: "Heart",
     color: "#DDA0DD",
     is_active: true,
-    sort_order: 6
+    sort_order: 7
   },
   {
     name: "Belleza",
@@ -64,7 +73,7 @@ const categories = [
     icon: "Sparkles",
     color: "#FFB6C1",
     is_active: true,
-    sort_order: 7
+    sort_order: 8
   },
   {
     name: "Deportes",
@@ -73,7 +82,7 @@ const categories = [
     icon: "Dumbbell",
     color: "#87CEEB",
     is_active: true,
-    sort_order: 8
+    sort_order: 9
   },
   {
     name: "Educación",
@@ -82,7 +91,7 @@ const categories = [
     icon: "GraduationCap",
     color: "#98D8C8",
     is_active: true,
-    sort_order: 9
+    sort_order: 10
   },
   {
     name: "Entretenimiento",
@@ -91,7 +100,7 @@ const categories = [
     icon: "Film",
     color: "#F7DC6F",
     is_active: true,
-    sort_order: 10
+    sort_order: 11
   },
   {
     name: "Fotografía",
@@ -100,7 +109,7 @@ const categories = [
     icon: "Camera",
     color: "#BB8FCE",
     is_active: true,
-    sort_order: 11
+    sort_order: 12
   },
   {
     name: "Moda",
@@ -109,7 +118,7 @@ const categories = [
     icon: "Shirt",
     color: "#85C1E9",
     is_active: true,
-    sort_order: 12
+    sort_order: 13
   }
 ];
 
