@@ -67,6 +67,9 @@ export default factories.createCoreController('api::pending-business.pending-bus
 
       if (pendingBusiness) {
         console.log("Pending business found:", JSON.stringify(pendingBusiness));
+        console.log("Category:", (pendingBusiness as any).category);
+        console.log("Zone:", (pendingBusiness as any).zone);
+        console.log("Business Plan:", (pendingBusiness as any).business_plan);
 
         // Preparar datos para crear el negocio
         const businessData: any = {
@@ -84,29 +87,65 @@ export default factories.createCoreController('api::pending-business.pending-bus
         };
 
         // Agregar relaciones si existen (usando documentId para Strapi v5)
-        if ((pendingBusiness as any).category?.documentId) {
-          businessData.category = {
-            connect: [(pendingBusiness as any).category.documentId]
-          };
+        // Intentar diferentes formatos de datos que puede devolver Strapi
+        const category = (pendingBusiness as any).category;
+        if (category) {
+          const categoryDocId = category.documentId || category[0]?.documentId;
+          console.log("Category documentId:", categoryDocId);
+          if (categoryDocId) {
+            businessData.category = { connect: [categoryDocId] };
+          } else if (category.id) {
+            // Fallback: buscar el documentId usando el ID
+            const categoryEntity = await strapi.entityService.findOne('api::category.category', category.id);
+            if (categoryEntity && (categoryEntity as any).documentId) {
+              businessData.category = { connect: [(categoryEntity as any).documentId] };
+              console.log("Category found by ID, documentId:", (categoryEntity as any).documentId);
+            }
+          }
         }
 
-        if ((pendingBusiness as any).zone?.documentId) {
-          businessData.zone = {
-            connect: [(pendingBusiness as any).zone.documentId]
-          };
+        const zone = (pendingBusiness as any).zone;
+        if (zone) {
+          const zoneDocId = zone.documentId || zone[0]?.documentId;
+          console.log("Zone documentId:", zoneDocId);
+          if (zoneDocId) {
+            businessData.zone = { connect: [zoneDocId] };
+          } else if (zone.id) {
+            // Fallback: buscar el documentId usando el ID
+            const zoneEntity = await strapi.entityService.findOne('api::zone.zone', zone.id);
+            if (zoneEntity && (zoneEntity as any).documentId) {
+              businessData.zone = { connect: [(zoneEntity as any).documentId] };
+              console.log("Zone found by ID, documentId:", (zoneEntity as any).documentId);
+            }
+          }
         }
 
-        if ((pendingBusiness as any).business_plan?.documentId) {
-          businessData.plan = {
-            connect: [(pendingBusiness as any).business_plan.documentId]
-          };
+        const businessPlan = (pendingBusiness as any).business_plan;
+        if (businessPlan) {
+          const planDocId = businessPlan.documentId || businessPlan[0]?.documentId;
+          console.log("Business Plan documentId:", planDocId);
+          if (planDocId) {
+            businessData.plan = { connect: [planDocId] };
+          } else if (businessPlan.id) {
+            // Fallback: buscar el documentId usando el ID
+            const planEntity = await strapi.entityService.findOne('api::business-plan.business-plan', businessPlan.id);
+            if (planEntity && (planEntity as any).documentId) {
+              businessData.plan = { connect: [(planEntity as any).documentId] };
+              console.log("Business Plan found by ID, documentId:", (planEntity as any).documentId);
+            }
+          }
         }
 
         // Agregar logo si existe
-        if ((pendingBusiness as any).logo?.documentId) {
-          businessData.main_image = {
-            connect: [(pendingBusiness as any).logo.documentId]
-          };
+        const logo = (pendingBusiness as any).logo;
+        if (logo) {
+          const logoDocId = logo.documentId || logo[0]?.documentId;
+          console.log("Logo documentId:", logoDocId);
+          if (logoDocId) {
+            businessData.main_image = { connect: [logoDocId] };
+          } else if (logo.id) {
+            businessData.main_image = { connect: [logo.id] };
+          }
         }
 
         console.log("Business data to create:", JSON.stringify(businessData));
@@ -277,29 +316,54 @@ export default factories.createCoreController('api::pending-business.pending-bus
       };
 
       // Agregar relaciones si existen (usando documentId para Strapi v5)
-      if ((pendingBusiness as any).category?.documentId) {
-        businessData.category = {
-          connect: [(pendingBusiness as any).category.documentId]
-        };
+      const category = (pendingBusiness as any).category;
+      if (category) {
+        const categoryDocId = category.documentId || category[0]?.documentId;
+        if (categoryDocId) {
+          businessData.category = { connect: [categoryDocId] };
+        } else if (category.id) {
+          const categoryEntity = await strapi.entityService.findOne('api::category.category', category.id);
+          if (categoryEntity && (categoryEntity as any).documentId) {
+            businessData.category = { connect: [(categoryEntity as any).documentId] };
+          }
+        }
       }
 
-      if ((pendingBusiness as any).zone?.documentId) {
-        businessData.zone = {
-          connect: [(pendingBusiness as any).zone.documentId]
-        };
+      const zone = (pendingBusiness as any).zone;
+      if (zone) {
+        const zoneDocId = zone.documentId || zone[0]?.documentId;
+        if (zoneDocId) {
+          businessData.zone = { connect: [zoneDocId] };
+        } else if (zone.id) {
+          const zoneEntity = await strapi.entityService.findOne('api::zone.zone', zone.id);
+          if (zoneEntity && (zoneEntity as any).documentId) {
+            businessData.zone = { connect: [(zoneEntity as any).documentId] };
+          }
+        }
       }
 
-      if ((pendingBusiness as any).business_plan?.documentId) {
-        businessData.plan = {
-          connect: [(pendingBusiness as any).business_plan.documentId]
-        };
+      const businessPlan = (pendingBusiness as any).business_plan;
+      if (businessPlan) {
+        const planDocId = businessPlan.documentId || businessPlan[0]?.documentId;
+        if (planDocId) {
+          businessData.plan = { connect: [planDocId] };
+        } else if (businessPlan.id) {
+          const planEntity = await strapi.entityService.findOne('api::business-plan.business-plan', businessPlan.id);
+          if (planEntity && (planEntity as any).documentId) {
+            businessData.plan = { connect: [(planEntity as any).documentId] };
+          }
+        }
       }
 
       // Agregar logo si existe
-      if ((pendingBusiness as any).logo?.documentId) {
-        businessData.main_image = {
-          connect: [(pendingBusiness as any).logo.documentId]
-        };
+      const logo = (pendingBusiness as any).logo;
+      if (logo) {
+        const logoDocId = logo.documentId || logo[0]?.documentId;
+        if (logoDocId) {
+          businessData.main_image = { connect: [logoDocId] };
+        } else if (logo.id) {
+          businessData.main_image = { connect: [logo.id] };
+        }
       }
 
       const newBusiness = await strapi.entityService.create('api::business.business', {
